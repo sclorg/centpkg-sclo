@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is a wrapper script around centpkg and cbs utility, that is especially
+# This is a wrapper script around rhpkg and cbs utility, that is especially
 # designed for working with packages and repos in SCLo SIG group.
 # The API should be the same as for centpkg, but currently uses RH internal
 # look-aside cache for storing binary files and github repos under
@@ -87,7 +87,7 @@ case "${action}" in
   build) build $@ ;;
   prep) prep $@ ;;
   scratch-build) scratch_build $@ ;;
-  local|pull|commit|switch-branch) centpkg ${action} $@ ;;
+  local|pull|commit|switch-branch) rhpkg ${action} $@ ;;
   *) usage ;;
 esac
 

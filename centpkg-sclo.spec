@@ -11,7 +11,7 @@ Source1:	README.md
 Source2:	LICENSE
 BuildArch:	noarch
 
-Requires:	centpkg centos-packager rhpkg
+Requires:	centos-packager rhpkg
 
 %description
 This is a wrapper script around centpkg and cbs utility, that is especially

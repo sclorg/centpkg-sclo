@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# This is a wrapper script around centpkg and cbs utility, that is especially
+# designed for working with packages and repos in SCLo SIG group.
+# The API should be the same as for centpkg, but currently uses RH internal
+# look-aside cache for storing binary files and github repos under
+# sclorg-distgit organization.
+# The branches we use for dist-git (on github) are following this regexp:
+#
+#   r'sig-(?P<signame>\w+)(?P<centosversion>\d)-?(?P<projectname>\w+)?-?(?P<releasename>\w+)?'
+# (https://wiki.centos.org/BrianStinson/GitBranchesandKojiTags)
+#
+# while:
+#   <projectname> is SCL name (including prefix sclo-, rh- if there is one in SCL name
+#   <releasename> is the namespace where the SCL is part of (rh for collections
+#                 that are rebuild of RHSCL or sclo for other SCLs)
+
+get_branch_info() {
+  # parsing branch name, we can get scl name, namespace and EL version
+  # in sclo a branch is called like sig-sclo6-rh-mariadb100-rh
+  export branch=$(git rev-parse --abbrev-ref HEAD)
+
+  if ! echo "${branch}" | grep -e '^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$' &>/dev/null ; then
+    echo "Branch could not be parsed properly."
+    usage
+  fi
+
+  export el_ver=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\1/')
+  export scl=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\2/')
+  export namespace=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\3/')
+}
+
+srpm() {
+  rhpkg sources
+  rpmbuild -bs --nodeps --define "_sourcedir ." --define "_srcrpmdir ." --define "dist .el${el_ver}" -D "scl ${scl}" `rhpkg gimmespec`
+}
+
+get_srpm() {
+  srpm | sed -e 's/^Wrote: \.\///'
+}
+
+scratch_build() {
+  echo cbs build --scratch $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
+}
+
+build() {
+  if [ -n "`git diff origin/$branch`" ] ; then
+    echo "You must commit and push changes before building."
+    git status
+    return 1
+  fi
+  echo cbs build $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
+}
+
+clone() {
+  if [ -z "${1}" ] ; then
+    usage
+  fi
+  git clone "https://github.com/sclorg-distgit/${1}.git"
+}
+
+prep() {
+  rhpkg --dist "rhel-${el_ver}" prep
+}
+
+usage() {
+  echo "Usage `basename $0` {build,clone,commit,local,prep,pull,scratch-build,srpm}"
+  exit 1
+}
+
+if [ -z "${1}" ] ; then
+  usage
+fi
+
+action="${1}"
+shift
+
+# some actions don't need to have branch to be properly parsed
+case "${action}" in
+  clone|switch-branch) ;;
+  *) get_branch_info ;;
+esac
+
+case "${action}" in
+  srpm) srpm ;;
+  clone) clone $@;;
+  build) build $@ ;;
+  prep) prep $@ ;;
+  scratch-build) scratch_build $@ ;;
+  local|pull|commit|switch-branch) centpkg ${action} $@ ;;
+  *) usage ;;
+esac
+

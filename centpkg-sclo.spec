@@ -1,6 +1,6 @@
 Name:		centpkg-sclo
 Version:	0.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Wrapper script around centpkg and cbs utility
 
 Group:		Development/Tools
@@ -32,6 +32,9 @@ cp centpkg-sclo %{buildroot}%{_bindir}/${name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Jan 07 2016 Honza Horak <hhorak@redhat.com> - 0.1-2
+- Do not use centpkg, which is not yet ready
+
 * Thu Jan  7 2016 Honza Horak <hhorak@redhat.com> - 0.1-1
 - Initial packaging
 

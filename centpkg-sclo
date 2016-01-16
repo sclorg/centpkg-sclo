@@ -137,7 +137,8 @@ case "${action}" in
   scratch-build) scratch_build $@ ;;
   create-branch) create_branch $@ ;;
   help) usage ;;
-  local|pull|commit|switch-branch|import) fedpkg ${action} $@ ;;
+  local) fedpkg --dist "el${el_ver}" $@ local ;;
+  pull|commit|switch-branch|import) fedpkg ${action} $@ ;;
   *) usage ;;
 esac
 

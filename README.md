@@ -47,27 +47,31 @@ $> centpkg-sclo clone mariadb
 $> cd mariadb
 
 # 3. Create a new branch according the scheme documented in [https://wiki.centos.org/BrianStinson/GitBranchesandKojiTags](https://wiki.centos.org/BrianStinson/GitBranchesandKojiTags)
-$> centpkg-sclo create-branch sig-sclo7-rh-mariadb101-rh
+# For CentOS 7 and rh-mariadb101 SCL it will be 'sig-sclo7-rh-mariadb101-rh'
+$> centpkg-sclo create-branch rh-mariadb101 7
 
-# 4. Import the srpm package
+# 4. (optionally) Switch to particular branch
+$> centpkg-sclo switch-branch sig-sclo6-rh-mariadb101-rh
+
+# 5. Import the srpm package
 $> centpkg-sclo import rh-mariadb101-mariadb-10.1.10-1.el7.src.rpm
 
-# 5. Commit the changes
+# 6. Commit the changes
 $> git commit -am "Initial commit"
 
-# 6. Push the changes
+# 7. Push the changes
 $> git push
 
-# 7. (optionally) Build package locally
+# 8. (optionally) Build package locally
 $> centpkg-sclo local
 
-# 8. (optionally) Build testing package in CBS
+# 9. (optionally) Build testing package in CBS
 $> centpkd-sclo scratch-build
 
-# 9. (optionally) Create SRPM that may be submitted to CBS manually using `cbs` utility
+# 10. (optionally) Create SRPM that may be submitted to CBS manually using `cbs` utility
 $> centpkg-sclo srpm
 
-# 10. Finally, build regular package in CBS
+# 11. Finally, build regular package in CBS
 $> centpkg-sclo build
 ```
 

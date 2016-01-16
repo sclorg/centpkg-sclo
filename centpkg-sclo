@@ -45,7 +45,7 @@ get_srpm() {
 }
 
 scratch_build() {
-  echo cbs build --scratch $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
+  cbs build --scratch $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
 }
 
 build() {
@@ -54,7 +54,7 @@ build() {
     git status
     return 1
   fi
-  echo cbs build $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
+  cbs build $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
 }
 
 clone() {

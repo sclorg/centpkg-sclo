@@ -104,11 +104,13 @@ create_branch() {
 }
 
 usage() {
-  echo "Usage `basename $0` {build,clone,commit,create-branch,import,local,prep,pull,scratch-build,srpm}"
+  echo "Usage `basename $0` {build,clone,commit,create-branch,help,import,local,prep,pull,scratch-build,srpm}"
   echo
   echo "Actions except create-branch work the same as we know it from fedpkg."
   echo "Action create-branch creates a new branch in current repository."
   echo "For creating entirely new repository, go to ${GITHUB_ORG}."
+  echo
+  echo "For description an usage of other commands, see 'fedpkg help' output."
   echo
   echo "Example workflow is available in https://github.com/sclorg/centpkg-sclo/blob/master/README.md."
   exit 1
@@ -123,7 +125,7 @@ shift
 
 # some actions don't need to have branch to be properly parsed
 case "${action}" in
-  clone|switch-branch|create-branch) ;;
+  clone|switch-branch|create-branch|help) ;;
   *) get_branch_info ;;
 esac
 
@@ -134,6 +136,7 @@ case "${action}" in
   prep) prep $@ ;;
   scratch-build) scratch_build $@ ;;
   create-branch) create_branch $@ ;;
+  help) usage ;;
   local|pull|commit|switch-branch|import) fedpkg ${action} $@ ;;
   *) usage ;;
 esac

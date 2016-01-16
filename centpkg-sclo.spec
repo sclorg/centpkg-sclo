@@ -1,6 +1,6 @@
 Name:		centpkg-sclo
 Version:	0.1
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	Wrapper script around centpkg and cbs utility
 
 Group:		Development/Tools
@@ -32,6 +32,9 @@ cp centpkg-sclo %{buildroot}%{_bindir}/${name}
 %{_bindir}/%{name}
 
 %changelog
+* Sat Jan 16 2016 Honza Horak <hhorak@redhat.com> - 0.1-4
+- Write better help in README.md and mention help command
+
 * Sat Jan 16 2016 Honza Horak <hhorak@redhat.com> - 0.1-3
 - Add new action create-branch
   Use fedpkg instead of rhpkg

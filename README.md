@@ -40,13 +40,13 @@ Action 'create-branch' creates a new branch in current repository. For creating 
 
 ### Example of whole workflow when building a new package
 ```
-# 1. Create a repository in GUI at [https://github.com/sclorg-distgit](https://github.com/sclorg-distgit), e.g. mariadb
+# 1. Create a repository in GUI at https://github.com/sclorg-distgit, e.g. mariadb
 
 # 2. Clone the repository locally and enther the directory
 $> centpkg-sclo clone mariadb
 $> cd mariadb
 
-# 3. Create a new branch according the scheme documented in [https://wiki.centos.org/BrianStinson/GitBranchesandKojiTags](https://wiki.centos.org/BrianStinson/GitBranchesandKojiTags)
+# 3. Create a new branch according the scheme documented in https://wiki.centos.org/BrianStinson/GitBranchesandKojiTags
 # For CentOS 7 and rh-mariadb101 SCL it will be 'sig-sclo7-rh-mariadb101-rh'
 $> centpkg-sclo create-branch rh-mariadb101 7
 

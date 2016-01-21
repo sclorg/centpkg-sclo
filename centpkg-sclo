@@ -24,15 +24,28 @@ get_branch_info() {
   # in sclo a branch is called like sig-sclo6-rh-mariadb100-rh
   export branch=$(git rev-parse --abbrev-ref HEAD)
 
-  if ! echo "${branch}" | grep -e '^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$' &>/dev/null ; then
+  if echo "${branch}" | grep -e '^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$' &>/dev/null ; then
+    export el_ver=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\1/')
+    export scl=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\2/')
+    export namespace=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\3/')
+  else
+    # trying to get branch and sclname from cmdline args
+    while [ -n "$2" ] ; do
+      case "$1" in
+        --el_ver) el_ver="$2" ;;
+        --scl) scl="$2" ;;
+        --namespace) namespace="$2" ;;
+        *) ;;
+      esac
+    shift
+    done
+  fi
+
+  if ! [ -n "$el_ver" -a -n "$scl" -a -n "$namespace" ] ; then
     echo "Error: Branch could not be parsed properly."
     echo
     usage
   fi
-
-  export el_ver=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\1/')
-  export scl=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\2/')
-  export namespace=$(echo "${branch}" | sed -e 's/^sig-sclo\([0-9]*\)-\(.*\)-\([a-z]*\)$/\3/')
 }
 
 srpm() {
@@ -112,6 +125,12 @@ usage() {
   echo
   echo "For description an usage of other commands, see 'fedpkg help' output."
   echo
+  echo "Some commands need to have some arguments (EL version, SCL name, SCLo namespace) which are taken from actual branch by default."
+  echo "If you work with a branch that cannot be parsed, you may specify by arguments:"
+  echo "  --el_ver [6|7]"
+  echo "  --namespace [rh|scl]"
+  echo "  --scl <scl-name>"
+  echo
   echo "Example workflow is available in https://github.com/sclorg/centpkg-sclo/blob/master/README.md."
   exit 1
 }
@@ -125,8 +144,8 @@ shift
 
 # some actions don't need to have branch to be properly parsed
 case "${action}" in
-  clone|switch-branch|create-branch|help) ;;
-  *) get_branch_info ;;
+  clone|switch-branch|create-branch|help|import) ;;
+  *) get_branch_info $@ ;;
 esac
 
 case "${action}" in

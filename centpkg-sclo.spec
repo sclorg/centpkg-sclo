@@ -1,6 +1,6 @@
 Name:		centpkg-sclo
 Version:	0.1
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	Wrapper script around centpkg and cbs utility
 
 Group:		Development/Tools
@@ -32,6 +32,10 @@ cp centpkg-sclo %{buildroot}%{_bindir}/${name}
 %{_bindir}/%{name}
 
 %changelog
+* Thu Jan 21 2016 Honza Horak <hhorak@redhat.com> - 0.1-7
+- Check pkg in tag before building
+  Add import command
+
 * Sat Jan 16 2016 Honza Horak <hhorak@redhat.com> - 0.1-6
 - Define explicit dist tag for local action
 

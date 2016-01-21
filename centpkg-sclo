@@ -54,7 +54,11 @@ srpm() {
 }
 
 get_srpm() {
-  srpm | sed -e 's/^Wrote: \.\///'
+  srpm=$(srpm | tail -n 1 | sed -e 's/^Wrote: \.\///')
+  if ! [[ "$srpm" =~ .*\.src\.rpm$ ]] ; then
+    return 1
+  fi
+  echo "$srpm"
 }
 
 get_pkg_name() {

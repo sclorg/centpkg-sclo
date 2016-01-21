@@ -57,6 +57,15 @@ get_srpm() {
   srpm | sed -e 's/^Wrote: \.\///'
 }
 
+get_pkg_name() {
+   echo "$1" | sed -e 's/-[^-]*-[^-]*\.src\.rpm$//'
+}
+
+check_pkg_tag() {
+  cbs list-pkgs --tag="${1}" --quiet | awk '{print $1}' | grep -e "^${2}$" &>/dev/null
+  return $?
+}
+
 scratch_build() {
   cbs build --scratch $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
 }
@@ -67,7 +76,16 @@ build() {
     git status
     return 1
   fi
-  cbs build $@ "sclo${el_ver}-${scl}-${namespace}-el${el_ver}" `get_srpm`
+  srpm=$(get_srpm)
+  target="sclo${el_ver}-${scl}-${namespace}-el${el_ver}"
+  tag="sclo${el_ver}-${scl}-${namespace}-candidate"
+  pkg=$(get_pkg_name $srpm)
+  if ! check_pkg_tag "${tag}" "${pkg}" ; then
+    echo "Add the package to the tag first:"
+    echo "cbs add-pkg ${tag} --owner=sclo ${pkg}"
+    return 1
+  fi
+  cbs build $@ "${target}" "${srpm}"
 }
 
 clone() {

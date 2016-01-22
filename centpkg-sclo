@@ -166,6 +166,8 @@ usage() {
   echo "  --namespace [rh|scl]"
   echo "  --scl <scl-name>"
   echo
+  echo "For commands that centpkg-sclo doesn't need to handle specifically, fedpkg is used. Please, realize that some commands not included in the list above might not work properly from that reason."
+  echo
   echo "Example workflow is available in https://github.com/sclorg/centpkg-sclo/blob/master/README.md."
   exit 1
 }
@@ -192,7 +194,6 @@ case "${action}" in
   create-branch) create_branch $@ ;;
   help) usage ;;
   local) local $@ ;;
-  pull|commit|switch-branch|import) fedpkg ${action} $@ ;;
-  *) usage ;;
+  *) fedpkg ${action} $@ ;;
 esac
 

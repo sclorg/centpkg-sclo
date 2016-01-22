@@ -1,6 +1,6 @@
 Name:		centpkg-sclo
 Version:	0.1
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	Wrapper script around centpkg and cbs utility
 
 Group:		Development/Tools
@@ -32,6 +32,9 @@ cp centpkg-sclo %{buildroot}%{_bindir}/${name}
 %{_bindir}/%{name}
 
 %changelog
+* Fri Jan 22 2016 Honza Horak <hhorak@redhat.com> - 0.1-9
+- Support local build better
+
 * Thu Jan 21 2016 Honza Horak <hhorak@redhat.com> - 0.1-8
 - Count with srpm output to be longer than one line
 

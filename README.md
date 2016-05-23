@@ -6,7 +6,7 @@ Currently, since there is no dist-git and look-aside cache working in CentOS for
 
 ## Install instructions
 
-This tool is build as RPM in Copr at (https://copr.fedoraproject.org/coprs/hhorak/centpkg-sclo/)[https://copr.fedoraproject.org/coprs/hhorak/centpkg-sclo/].
+This tool is build as RPM in Copr at [https://copr.fedoraproject.org/coprs/hhorak/centpkg-sclo/](https://copr.fedoraproject.org/coprs/hhorak/centpkg-sclo/).
 
 ### Install instructions for Fedora 23
 ```
